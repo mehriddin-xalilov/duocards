@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests\Level;
 
+use App\Http\Requests\BaseRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreLevelRequest extends FormRequest
+class StoreLevelRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.

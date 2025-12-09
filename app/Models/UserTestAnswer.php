@@ -7,26 +7,33 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 
 /**
-* This is the model class for table "user_answers".
+* This is the model class for table "user_test_answers".
 */
 
-class UserAnswer extends Model
+class UserTestAnswer extends Model
 { 
-    protected $table = 'user_answers';
+    protected $table = 'user_test_answers';
 
     protected $fillable = [
     "id",
-    "user_id",
+    "session_id",
+    "test_id",
     "question_id",
     "answer_id",
     "is_correct",
+    "answered_at",
     "created_at",
     "updated_at"
 ];
     
-	public function user(): BelongsTo
+	public function session(): BelongsTo
 	{
-		return $this->belongsTo(User::class);
+		return $this->belongsTo(UserTestSession::class);
+	}
+
+	public function test(): BelongsTo
+	{
+		return $this->belongsTo(Test::class);
 	}
 
 	public function question(): BelongsTo

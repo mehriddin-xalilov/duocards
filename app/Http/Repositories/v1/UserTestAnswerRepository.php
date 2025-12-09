@@ -3,18 +3,18 @@
 namespace App\Http\Repositories\v1;
 
 
-use App\Models\UserProgress;
+use App\Models\UserTestAnswer;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Helpers\Traits\QueryBuilderTrait;
 
-class UserProgressRepository
+class UserTestAnswerRepository
 {
     use QueryBuilderTrait;
     /**
-     * @var UserProgress $ modelClass
+     * @var UserTestAnswer $ modelClass
      */
-    protected mixed $modelClass = UserProgress::class;
+    protected mixed $modelClass = UserTestAnswer::class;
 
     public function index(Request $request): JsonResponse
     {
@@ -30,30 +30,30 @@ class UserProgressRepository
         return $this->withPagination($query, $request);
     }
 
-    public function show(Request $request, UserProgress $userProgress): JsonResponse
+    public function show(Request $request, UserTestAnswer $userTestAnswer): JsonResponse
     {
-        $this->allowIncludeAndAppend($request, $userProgress);
-        return okResponse($userProgress);
+        $this->allowIncludeAndAppend($request, $userTestAnswer);
+        return okResponse($userTestAnswer);
     }
 
     public function store(Request $request): JsonResponse
     {
-        $model = UserProgress::query()->create($request->all());
+        $model = UserTestAnswer::query()->create($request->all());
         $this->allowIncludeAndAppend($request, $model);
         return okResponse($model);
     }
 
-    public function update(Request $request, UserProgress $userProgress): JsonResponse
+    public function update(Request $request, UserTestAnswer $userTestAnswer): JsonResponse
     {
-        $userProgress->update($request->all());
-        $this->allowIncludeAndAppend($request, $userProgress);
-        return okResponse($userProgress);
+        $userTestAnswer->update($request->all());
+        $this->allowIncludeAndAppend($request, $userTestAnswer);
+        return okResponse($userTestAnswer);
     }
 
-    public function destroy(UserProgress $userProgress): JsonResponse
+    public function destroy(UserTestAnswer $userTestAnswer): JsonResponse
     {
-        $userProgress->delete();
-        return okResponse($userProgress);
+        $userTestAnswer->delete();
+        return okResponse($userTestAnswer);
     }
 }
 

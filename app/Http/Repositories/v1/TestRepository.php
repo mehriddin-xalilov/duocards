@@ -3,18 +3,18 @@
 namespace App\Http\Repositories\v1;
 
 
-use App\Models\UserAnswer;
+use App\Models\Test;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Helpers\Traits\QueryBuilderTrait;
 
-class UserAnswerRepository
+class TestRepository
 {
     use QueryBuilderTrait;
     /**
-     * @var UserAnswer $ modelClass
+     * @var Test $ modelClass
      */
-    protected mixed $modelClass = UserAnswer::class;
+    protected mixed $modelClass = Test::class;
 
     public function index(Request $request): JsonResponse
     {
@@ -30,30 +30,30 @@ class UserAnswerRepository
         return $this->withPagination($query, $request);
     }
 
-    public function show(Request $request, UserAnswer $userAnswer): JsonResponse
+    public function show(Request $request, Test $test): JsonResponse
     {
-        $this->allowIncludeAndAppend($request, $userAnswer);
-        return okResponse($userAnswer);
+        $this->allowIncludeAndAppend($request, $test);
+        return okResponse($test);
     }
 
     public function store(Request $request): JsonResponse
     {
-        $model = UserAnswer::query()->create($request->all());
+        $model = Test::query()->create($request->all());
         $this->allowIncludeAndAppend($request, $model);
         return okResponse($model);
     }
 
-    public function update(Request $request, UserAnswer $userAnswer): JsonResponse
+    public function update(Request $request, Test $test): JsonResponse
     {
-        $userAnswer->update($request->all());
-        $this->allowIncludeAndAppend($request, $userAnswer);
-        return okResponse($userAnswer);
+        $test->update($request->all());
+        $this->allowIncludeAndAppend($request, $test);
+        return okResponse($test);
     }
 
-    public function destroy(UserAnswer $userAnswer): JsonResponse
+    public function destroy(Test $test): JsonResponse
     {
-        $userAnswer->delete();
-        return okResponse($userAnswer);
+        $test->delete();
+        return okResponse($test);
     }
 }
 

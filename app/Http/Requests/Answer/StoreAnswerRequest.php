@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests\Answer;
 
+use App\Http\Requests\BaseRequest;
+use Faker\Provider\Base;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreAnswerRequest extends FormRequest
+class StoreAnswerRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.

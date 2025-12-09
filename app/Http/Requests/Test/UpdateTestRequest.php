@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Question;
+namespace App\Http\Requests\Test;
 
 use App\Http\Requests\BaseRequest;
+use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateQuestionRequest extends BaseRequest
+class UpdateTestRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +23,13 @@ class UpdateQuestionRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'level_id' => 'nullable|integer|min:-2147483648|max:2147483647|exists:levels,id',
+            'name' => 'nullable|string',
             'category_id' => 'nullable|integer|min:-2147483648|max:2147483647|exists:categories,id',
-            'question_text' => 'nullable|string',
-            'type' => 'nullable|integer'
+            'level_id' => 'nullable|integer|min:-2147483648|max:2147483647|exists:levels,id',
+            'time_limit' => 'nullable|integer|min:-2147483648|max:2147483647',
+            'questions_count' => 'nullable|integer|min:-2147483648|max:2147483647',
+            'randomize_questions' => 'nullable|boolean',
+            'randomize_answers' => 'nullable|boolean'
         ];
     }
 }
