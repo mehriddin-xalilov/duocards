@@ -7,8 +7,7 @@ class Roles
     const ROLE_SUPER_ADMIN = 'super_admin'; //Super admin
 
     const ROLE_ADMIN = 'admin'; // Admin
-    const ROLE_COMPANY = 'company'; // Company
-    const ROLE_STUDENT = 'student'; // Students
+    const ROLE_USER = 'user'; // Foydalanuvchilar
 
 
     const ADMINS = self::ROLE_SUPER_ADMIN . ',' . self::ROLE_ADMIN;
@@ -19,8 +18,7 @@ class Roles
         return implode(',', [
             self::ROLE_SUPER_ADMIN,
             self::ROLE_ADMIN,
-            self::ROLE_COMPANY,
-            self::ROLE_STUDENT,
+            self::ROLE_USER
         ]);
     }
 
@@ -29,8 +27,7 @@ class Roles
         return [
             self::ROLE_SUPER_ADMIN,
             self::ROLE_ADMIN,
-            self::ROLE_COMPANY,
-            self::ROLE_STUDENT,
+            self::ROLE_USER,
         ];
     }
 

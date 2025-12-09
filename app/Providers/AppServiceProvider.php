@@ -28,8 +28,7 @@ class AppServiceProvider extends ServiceProvider
         Passport::tokensCan([
             Roles::ROLE_ADMIN => 'admin',
             Roles::ROLE_SUPER_ADMIN => 'super_admin',
-            Roles::ROLE_STUDENT => 'student',
-            Roles::ROLE_COMPANY => 'company',
+            Roles::ROLE_USER => 'user',
         ]);
         Passport::setDefaultScope([Roles::ROLE_SUPER_ADMIN]);
     }
