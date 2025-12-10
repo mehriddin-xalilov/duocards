@@ -23,8 +23,8 @@ class StoreQuestionRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'level_id' => 'required|integer|min:-2147483648|max:2147483647|exists:levels,id',
-            'category_id' => 'required|integer|min:-2147483648|max:2147483647|exists:categories,id',
+            'level_id' => 'nullable|integer|min:-2147483648|max:2147483647|exists:levels,id',
+            'category_id' => 'nullable|integer|min:-2147483648|max:2147483647|exists:categories,id',
             'question_text' => 'required|string',
             'type' => 'nullable|integer'
         ];

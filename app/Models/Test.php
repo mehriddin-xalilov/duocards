@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 
 /**
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 */
 
 class Test extends Model
-{ 
+{
     protected $table = 'tests';
 
     protected $fillable = [
@@ -26,7 +27,7 @@ class Test extends Model
     "created_at",
     "updated_at"
 ];
-    
+
 	public function category(): BelongsTo
 	{
 		return $this->belongsTo(Category::class);
@@ -36,6 +37,15 @@ class Test extends Model
 	{
 		return $this->belongsTo(Level::class);
 	}
+    public function questions(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Question::class,
+            'test_questions',
+            'test_id',
+            'question_id'
+        )->withTimestamps();
+    }
 
 
 }

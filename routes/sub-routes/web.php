@@ -28,6 +28,11 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth:api']], function () {
         Route::get('/{test}', [App\Http\Controllers\Api\v1\TestController::class, 'show'])->whereNumber('test');
     });
 
+    Route::prefix('specialities')->group(function () {
+        Route::get('/', [App\Http\Controllers\Api\v1\SpecialityController::class, 'index']);
+        Route::get('/{speciality}', [App\Http\Controllers\Api\v1\SpecialityController::class, 'show'])->whereNumber('speciality');
+    });
+
     Route::prefix('usertestsessions')->group(function () {
         Route::get('/', [App\Http\Controllers\Api\v1\UserTestSessionController::class, 'index']);
         Route::get('/{usertestsession}', [App\Http\Controllers\Api\v1\UserTestSessionController::class, 'show'])->whereNumber('usertestsession');

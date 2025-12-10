@@ -24,12 +24,13 @@ class StoreTestRequest extends BaseRequest
     {
         return [
             'name' => 'required|string',
-            'category_id' => 'required|integer|min:-2147483648|max:2147483647|exists:categories,id',
-            'level_id' => 'required|integer|min:-2147483648|max:2147483647|exists:levels,id',
-            'time_limit' => 'required|integer|min:-2147483648|max:2147483647',
-            'questions_count' => 'required|integer|min:-2147483648|max:2147483647',
+            'category_id' => 'nullable|integer|min:-2147483648|max:2147483647|exists:categories,id',
+            'level_id' => 'nullable|integer|min:-2147483648|max:2147483647|exists:levels,id',
+            'per_question_time' => 'required|integer|min:1|max:60',
             'randomize_questions' => 'required|boolean',
-            'randomize_answers' => 'required|boolean'
+            'randomize_answers' => 'required|boolean',
+            'questions' => 'required|array',
+            'questions.*.id' => 'required|integer|exists:questions,id'
         ];
     }
 }

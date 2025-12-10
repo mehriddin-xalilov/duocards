@@ -2,16 +2,17 @@
 
 namespace App\Http\Requests\Speciality;
 
+use App\Http\Requests\BaseRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreSpecialityRequest extends FormRequest
+class StoreSpecialityRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**

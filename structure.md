@@ -63,7 +63,6 @@ Foydalanuvchi ma’lumotlari va autentifikatsiya:
 ### Aloqalar
 - **userRole** → 1:1
 - **detail** → student bilan BelongsTo
-- **vacancies**, **vacancyViews**, **vacancyUsers** → 1:M
 
 ---
 

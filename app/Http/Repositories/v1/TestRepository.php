@@ -38,7 +38,14 @@ class TestRepository
 
     public function store(Request $request): JsonResponse
     {
+        $questions = $request->questions;
+        $count = count($questions);
+        $perQuestionTime = $request->per_question_time;
+        $request->merge(['questions_count' => $count, 'time_limit' => $perQuestionTime*$count]);
         $model = Test::query()->create($request->all());
+        $model->questions()->sync(
+            collect($questions)->pluck('id')->toArray()
+        );
         $this->allowIncludeAndAppend($request, $model);
         return okResponse($model);
     }

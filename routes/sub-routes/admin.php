@@ -51,6 +51,13 @@ Route::group(['prefix' => 'v1/admin', 'middleware' => ['auth:api']], function ()
         Route::get('/{test}', [App\Http\Controllers\Api\v1\TestController::class, 'show'])->whereNumber('test');
         Route::delete('/{test}', [App\Http\Controllers\Api\v1\TestController::class, 'destroy'])->whereNumber('test');
     });
+    Route::prefix('specialities')->group(function () {
+        Route::get('/', [App\Http\Controllers\Api\v1\SpecialityController::class, 'adminIndex']);
+        Route::post('/', [App\Http\Controllers\Api\v1\SpecialityController::class, 'store']);
+        Route::put('/{speciality}', [App\Http\Controllers\Api\v1\SpecialityController::class, 'update'])->whereNumber('speciality');
+        Route::get('/{speciality}', [App\Http\Controllers\Api\v1\SpecialityController::class, 'show'])->whereNumber('speciality');
+        Route::delete('/{speciality}', [App\Http\Controllers\Api\v1\SpecialityController::class, 'destroy'])->whereNumber('speciality');
+    });
     Route::prefix('usertestsessions')->group(function () {
         Route::get('/', [App\Http\Controllers\Api\v1\UserTestSessionController::class, 'adminIndex']);
         Route::post('/', [App\Http\Controllers\Api\v1\UserTestSessionController::class, 'store']);

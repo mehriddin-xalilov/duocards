@@ -14,8 +14,14 @@ return new class extends Migration
         Schema::create('tests', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('category_id')->constrained('categories')->onDelete('set null');
-            $table->foreignId('level_id')->constrained('levels')->onDelete('set null');
+            $table->foreignId('category_id')
+                ->nullable()
+                ->constrained('categories')
+                ->onDelete('set null');
+            $table->foreignId('level_id')
+                ->nullable()
+                ->constrained('levels')
+                ->onDelete('set null');
             $table->integer('time_limit');
             $table->integer('questions_count');
             $table->boolean('randomize_questions')->default(false);

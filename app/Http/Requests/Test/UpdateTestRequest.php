@@ -26,10 +26,11 @@ class UpdateTestRequest extends BaseRequest
             'name' => 'nullable|string',
             'category_id' => 'nullable|integer|min:-2147483648|max:2147483647|exists:categories,id',
             'level_id' => 'nullable|integer|min:-2147483648|max:2147483647|exists:levels,id',
-            'time_limit' => 'nullable|integer|min:-2147483648|max:2147483647',
-            'questions_count' => 'nullable|integer|min:-2147483648|max:2147483647',
+            'per_question_time' => 'nullable|integer|min:1|max:60',
             'randomize_questions' => 'nullable|boolean',
-            'randomize_answers' => 'nullable|boolean'
+            'randomize_answers' => 'nullable|boolean',
+            'questions' => 'nullable|array',
+            'questions.*.id' => 'nullable|integer|exists:questions,id'
         ];
     }
 }

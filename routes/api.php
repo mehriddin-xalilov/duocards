@@ -44,14 +44,4 @@ require __DIR__.'/sub-routes/web.php';
 
 
 
-Route::prefix('specialities')->group(function () {
-    Route::get('/', [App\Http\Controllers\Api\v1\SpecialityController::class, 'adminIndex']);
-    Route::post('/', [App\Http\Controllers\Api\v1\SpecialityController::class, 'store']);
-    Route::put('/{speciality}', [App\Http\Controllers\Api\v1\SpecialityController::class, 'update'])->whereNumber('speciality');
-    Route::get('/{speciality}', [App\Http\Controllers\Api\v1\SpecialityController::class, 'show'])->whereNumber('speciality');
-    Route::delete('/{speciality}', [App\Http\Controllers\Api\v1\SpecialityController::class, 'destroy'])->whereNumber('speciality');
-});
-Route::prefix('specialities')->group(function () {
-    Route::get('/', [App\Http\Controllers\Api\v1\SpecialityController::class, 'index']);
-    Route::get('/{speciality}', [App\Http\Controllers\Api\v1\SpecialityController::class, 'show'])->whereNumber('speciality');
-});
+
