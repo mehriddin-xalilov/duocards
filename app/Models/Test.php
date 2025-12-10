@@ -48,4 +48,10 @@ class Test extends Model
     }
 
 
+    public function specialities(): BelongsToMany
+    {
+        return $this->belongsToMany(Speciality::class, 'speciality_test', 'test_id', 'speciality_id');
+    }
+
+
 }
