@@ -25,6 +25,7 @@ class Level extends Model
     "created_at",
     "updated_at"
 ];
+    protected $hidden = ['type'];
     public function questions(): HasMany
     {
         return $this->hasMany(Question::class);

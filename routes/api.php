@@ -13,7 +13,7 @@ Route::prefix('v1')->group(function () {
         Route::post('login', [AuthController::class, 'login']);
         Route::post('social-login', [AuthController::class, "socialLogin"]);
     });
-    Route::group(['prefix' => 'auth/admin',], function () {
+    Route::group(['prefix' => 'admin/auth',], function () {
         Route::post('login', [AuthController::class, 'adminLogin']);
     });
 });

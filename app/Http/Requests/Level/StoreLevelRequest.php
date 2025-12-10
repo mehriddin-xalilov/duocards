@@ -23,7 +23,7 @@ class StoreLevelRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|json',
+            'name' => 'required|string',
             'type' => 'nullable|integer'
         ];
     }

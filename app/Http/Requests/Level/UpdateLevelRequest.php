@@ -23,7 +23,7 @@ class UpdateLevelRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'name' => 'nullable|json',
+            'name' => 'nullable|string',
             'type' => 'nullable|integer'
         ];
     }

@@ -23,7 +23,7 @@ class StoreCategoryRequest extends BaseRequest
     {
         return [
             'name' => 'required|string',
-            'parent_id' => 'nullable|integer'
+            'parent_id' => 'nullable|integer|exists:categories,id'
         ];
     }
 }

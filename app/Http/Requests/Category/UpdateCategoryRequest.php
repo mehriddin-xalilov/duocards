@@ -24,7 +24,7 @@ class UpdateCategoryRequest extends BaseRequest
     {
         return [
             'name' => 'nullable|string',
-            'parent_id' => 'nullable|integer|min:-2147483648|max:2147483647'
+            'parent_id' => 'nullable|integer|exists:categories,id'
         ];
     }
 }
