@@ -1,7 +1,9 @@
 <?php
 
 use App\Helpers\Roles;
+use App\Http\Controllers\Api\v1\TestSolvingController;
 use Illuminate\Support\Facades\Route;
+
 Route::group(['prefix' => 'v1', 'middleware' => ['auth:api']], function () {
     Route::prefix('categories')->group(function () {
         Route::get('/', [App\Http\Controllers\Api\v1\CategoryController::class, 'index']);
@@ -41,5 +43,22 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth:api']], function () {
     Route::prefix('usertestanswers')->group(function () {
         Route::get('/', [App\Http\Controllers\Api\v1\UserTestAnswerController::class, 'index']);
         Route::get('/{usertestanswer}', [App\Http\Controllers\Api\v1\UserTestAnswerController::class, 'show'])->whereNumber('usertestanswer');
+    });
+
+
+    Route::prefix('test')->group(function () {
+
+        Route::post('/start', [TestSolvingController::class, 'startTest']);
+
+        Route::post('/questions', [TestSolvingController::class, 'getTestQuestions']);
+
+        Route::post('/answer', [TestSolvingController::class, 'submitAnswer']);
+
+        Route::post('/finish', [TestSolvingController::class, 'finishTest']);
+
+        Route::get('/results/{sessionId}', [TestSolvingController::class, 'getTestResults']);
+
+        Route::get('/history', [TestSolvingController::class, 'getUserTestHistory']);
+
     });
 });
