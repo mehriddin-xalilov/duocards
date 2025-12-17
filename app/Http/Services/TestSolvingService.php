@@ -17,7 +17,7 @@ class TestSolvingService
      */
     public function startTest(int $userId, int $testId)
     {
-        $test = Test::findOrFail($testId);
+        $test=Test::findOrFail($testId);
 
         // Agar foydalanuvchi bu testni allaqachon yechayotgan bo'lsa
         $existingSession = UserTestSession::where('user_id', $userId)

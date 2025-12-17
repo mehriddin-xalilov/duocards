@@ -26,12 +26,9 @@ class TestSolvingController extends Controller
 
         try {
             $result = $this->testSolvingService->startTest(auth()->id(), $request->test_id);
-            return response()->json($result, 201);
+            return okResponse($result, 201);
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ], 400);
+            return errorResponse(message: $e->getMessage(), status: 400);
         }
     }
 
@@ -43,15 +40,11 @@ class TestSolvingController extends Controller
         $request->validate([
             'session_id' => 'required|exists:user_test_sessions,id',
         ]);
-
         try {
             $result = $this->testSolvingService->getTestQuestions($request->session_id);
-            return response()->json($result);
+            return okResponse($result);
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ], 400);
+            return errorResponse(message: $e->getMessage(), status: 400);
         }
     }
 
@@ -74,12 +67,9 @@ class TestSolvingController extends Controller
                 $request->answer_id,
                 $request->open_answer
             );
-            return response()->json($result);
+            return okResponse($result);
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ], 400);
+            return errorResponse(message: $e->getMessage(), status: 400);
         }
     }
 
@@ -94,12 +84,9 @@ class TestSolvingController extends Controller
 
         try {
             $result = $this->testSolvingService->finishTest($request->session_id);
-            return response()->json($result);
+            return okResponse($result);
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ], 400);
+            return errorResponse(message: $e->getMessage(), status: 400);
         }
     }
 
@@ -110,12 +97,9 @@ class TestSolvingController extends Controller
     {
         try {
             $result = $this->testSolvingService->getTestResults($sessionId);
-            return response()->json($result);
+            return okResponse($result);
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ], 400);
+            return errorResponse(message: $e->getMessage(), status: 400);
         }
     }
 
@@ -126,15 +110,9 @@ class TestSolvingController extends Controller
     {
         try {
             $history = $this->testSolvingService->getUserTestHistory(auth()->id(), $request->per_page ?? 10);
-            return response()->json([
-                'success' => true,
-                'data' => $history
-            ]);
+            return okResponse($history);
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ], 400);
+            return errorResponse(message: $e->getMessage(), status: 400);
         }
     }
 }

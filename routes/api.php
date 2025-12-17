@@ -18,7 +18,7 @@ Route::prefix('v1')->group(function () {
     });
 });
 
-Route::prefix('v1')->group(function () {
+Route::prefix('v1/admin')->group(function () {
     Route::middleware('auth:api')->group(function () {
 
         Route::prefix('users')->group(function () {
@@ -26,22 +26,16 @@ Route::prefix('v1')->group(function () {
             Route::get('/get-me', [App\Http\Controllers\Api\v1\AuthController::class, 'getMe']);
             Route::put('/update-me', [App\Http\Controllers\Api\v1\AuthController::class, 'updateMe']);
             Route::post('/logout', [App\Http\Controllers\Api\v1\AuthController::class, 'logout']);
-
         });
     });
 });
 //-------------- Admin start ------------------//
-require __DIR__.'/sub-routes/admin.php';
+require __DIR__ . '/sub-routes/admin.php';
 //-------------- Admin end ------------------//
 
 
 //-------------- Clint start ------------------//
 
-require __DIR__.'/sub-routes/web.php';
+require __DIR__ . '/sub-routes/web.php';
 
 //-------------- Clint end ------------------//
-
-
-
-
-
