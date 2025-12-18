@@ -5,7 +5,7 @@ namespace Modules\FileManager\App\DTO;
 class UploadFileDto
 {
     public string $title;
-    public string $description;
+    public ?string $description;
     public string $slug;
     public string $ext;
     public string $file;

@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Str;
 use Modules\FileManager\App\Http\Repositories\FileRepository;
 
 class File extends Model
@@ -13,6 +15,7 @@ class File extends Model
     use SoftDeletes;
 
     protected $casts = [
+        'name' => 'array',
         'updated_at' => 'timestamp',
         'created_at' => 'timestamp'
     ];
@@ -21,7 +24,9 @@ class File extends Model
         'thumbnails',
     ];
     protected $fillable = [
+        'name',
         'title',
+        'author',
         'description',
         'slug',
         'ext',
@@ -32,21 +37,37 @@ class File extends Model
         'user_id',
         'size',
         'deleted_at',
-        'user_id',
+        'folder_id',
+
     ];
 
     protected $hidden = [
+        'user_id',
         'domain',
         'created_at',
         'deleted_at',
         'updated_at',
         'path',
-        'description'
     ];
 
     public function getUrlAttribute(): string
     {
         return trim($this->domain, '/') . '/' . $this->folder . $this->file;
+    }
+
+    public function folder()
+    {
+        return $this->belongsTo(Folder::class, 'folder_id');
+    }
+
+    protected static function booted(): void
+    {
+        parent::booted();
+
+        static::deleted(function ($file) {
+            (new FileRepository())->deleteFile($file);
+        });
+
     }
 
     public function getThumbnailsAttribute()
@@ -80,10 +101,44 @@ class File extends Model
     {
         return $this->folder . '/' . $this->file;
     }
-
-    public function author()
+    public function getThumbnailUrl(string $size = 'original'): ?string
     {
-        return $this->belongsTo(User::class, 'user_id');
+        $thumbnails = $this->thumbnails;
+
+        foreach ($thumbnails as $thumb) {
+            if ($thumb['slug'] === $size) {
+                return $thumb['src'];
+            }
+        }
+
+        return null;
     }
+//    public function getNameAttribute($value)
+//    {
+//        if (!$value) {
+//            return [];
+//        }
+//
+//        $data = is_string($value) ? json_decode($value, true) : $value;
+//
+//        if (!is_array($data)) {
+//            return [];
+//        }
+//        if (Str::contains(request()->path(), 'admin')) {
+//            return $data;
+//        }
+//
+//        $locales = [Lang::getLocale(), 'uz', 'oz', 'en', 'ru'];
+//
+//        foreach ($locales as $locale) {
+//            if (isset($data[$locale])) {
+//                return $data[$locale];
+//            }
+//        }
+//
+//        return array_values($data)[0] ?? '';
+//    }
+
+
 }
 

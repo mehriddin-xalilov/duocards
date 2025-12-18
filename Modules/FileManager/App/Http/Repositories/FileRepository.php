@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Drivers\Imagick\Driver;
+use Intervention\Image\ImageManager;
 use Intervention\Image\Laravel\Facades\Image;
 use Mockery\Exception;
 use Modules\FileManager\App\DTO\UploadFileDto;
@@ -65,10 +67,14 @@ class FileRepository
         \DB::beginTransaction();
         try {
             $dto = $this->generatePath($uploadedFile);
+
+            // Faylni ko'chirish
             $uploadedFile->move($dto->file_folder, $dto->file);
 
+            // Database ga saqlash
             $file = File::create($dto->toArray());
 
+            // Thumbnail yaratish (fayl ko'chirilgandan keyin)
             $this->createThumbnails($file);
 
             \DB::commit();
@@ -127,18 +133,20 @@ class FileRepository
 
     public function createThumbnails(File $file): ?bool
     {
+        // Rasm kengaytmalari tekshiruvi
         if (!in_array(strtolower($file->ext), $file->getImageExtensionsAttribute())) {
             return null;
         }
 
         $thumbsImages = config('filemanager.thumbs');
 
+        // Asl fayl yo'lini File modelining path attributeidan olish
         $originalFilePath = $file->path;
 
+        // Agar path bo'sh bo'lsa, manual qurish
         if (empty($originalFilePath)) {
             $originalFilePath = base_path('static/' . $file->getDist());
         }
-
         if (!file_exists($originalFilePath)) {
             return false;
         }
@@ -153,7 +161,6 @@ class FileRepository
                 }
                 $folderPath = rtrim($file->folder, '/') . '/';
                 $thumbnailPath = base_path('static/' . $folderPath . $file->slug . '_' . $slug . '.' . $file->ext);
-
                 $thumbnailDir = dirname($thumbnailPath);
                 if (!is_dir($thumbnailDir)) {
                     mkdir($thumbnailDir, 0777, true);
@@ -163,10 +170,10 @@ class FileRepository
                 if (strtolower($file->ext) == 'svg') {
                     copy($originalFilePath, $thumbnailPath);
                 } else {
-                    $img = Image::read($originalFilePath);
+                    $imageManager = new ImageManager(\Intervention\Image\Drivers\Gd\Driver::class);
+                    $img = $imageManager->read($originalFilePath);
                     $originalWidth = $img->width();
                     $originalHeight = $img->height();
-
                     if ($originalWidth > 0 && $originalHeight > 0) {
                         $height = intval($width * ($originalHeight / $originalWidth));
                         $img->resize($width, $height)->save($thumbnailPath, quality: $quality);
@@ -174,6 +181,7 @@ class FileRepository
                 }
             }
         } catch (Throwable $e) {
+            throw $e;
             \Log::error('Thumbnail creation failed: ' . $e->getMessage(), [
                 'file_id' => $file->id,
                 'file_path' => $originalFilePath,
@@ -192,6 +200,10 @@ class FileRepository
         $user = \Auth::guard('api')->user();
         if ($user && $user->role !== Roles::ROLE_ADMIN) {
             $query->where('user_id', $user->id);
+        }
+        if ($request->has('ext')&& !empty($request->ext)) {
+            $ext=explode(',',$request->ext);
+            $query->whereIn('ext',$ext);
         }
         return $this->withPagination($query, $request);
     }
@@ -229,8 +241,8 @@ class FileRepository
         $response = Http::withOptions([
             'verify' => false,
         ])->get($link);
-        $tempPath = tempnam(sys_get_temp_dir(), 'upload_');
-        file_put_contents($tempPath, $response->body());
+        $tempPath = tempnam(sys_get_temp_dir(), 'upload_'); // Temporary file path
+        file_put_contents($tempPath, $response->body()); // Save content to temp file
 
         $file = new UploadedFile(
             $tempPath,
@@ -250,6 +262,7 @@ class FileRepository
         }
         if (isset($response[0])) {
             $fileModel = $response[0];
+            // Create Fileable record
             Fileable::create([
                 'fileable_id' => $fileableId,
                 'file_id' => $fileModel->id,

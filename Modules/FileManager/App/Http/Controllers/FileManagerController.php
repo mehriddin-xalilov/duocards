@@ -2,15 +2,16 @@
 
 namespace Modules\FileManager\App\Http\Controllers;
 
+use App\Helpers\Traits\QueryBuilderTrait;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Modules\FileManager\App\Http\Repositories\FileRepository;
 use Modules\FileManager\App\Http\Requests\StoreFileRequest;
 use Modules\FileManager\App\Models\File;
-use Modules\FileManager\App\Models\Fileable;
 
 class FileManagerController extends Controller
 {
+    use QueryBuilderTrait;
     public function __construct(
         public FileRepository $fileRepository = new FileRepository(),
     )
@@ -25,17 +26,14 @@ class FileManagerController extends Controller
     {
         return $this->fileRepository->upload($request);
     }
-    public function checkUpload(StoreFileRequest $request)
-    {
-        return $this->fileRepository->upload($request);
-    }
     public function adminUpload(StoreFileRequest $request)
     {
         return $this->fileRepository->upload($request);
     }
 
-    public function show(File $file)
+    public function show(Request $request, File $file)
     {
+        $this->allowIncludeAndAppend($request, $file);
         return okResponse($file);
     }
 
@@ -43,14 +41,17 @@ class FileManagerController extends Controller
     {
         return $this->fileRepository->delete($file);
     }
-    public function showByKey(string $key)
+    public function update(Request $request, File $file)
     {
-        $files = Fileable::showByKey($key);
-
-        return response()->json([
-            'key' => $key,
-            'files' => $files,
+        $request->validate([
+            'name' => 'array',
         ]);
+        $file->update($request->only([
+            'name',
+            'title',
+            'description'
+        ]));
+        return okResponse($file);
     }
 
 }

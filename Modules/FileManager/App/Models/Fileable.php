@@ -22,13 +22,4 @@ class Fileable extends Model
     {
         return $this->belongsTo(File::class, 'file_id');
     }
-
-    public static function showByKey(string $key)
-    {
-        return self::where('fileable_key', $key)
-            ->with('file')
-            ->get()
-            ->pluck('file');
-    }
-
 }
