@@ -27,21 +27,25 @@ trait QueryBuilderTrait
             $model->load(explode(',', $request->get('include')));
         }
     }
-
-    protected function withPagination($query, Request $request): JsonResponse
+    protected function withPagination($query, Request $request, $resource = null): JsonResponse
     {
-        $query = $query->paginate($request->per_page ?? 30);
+        $paginator = $query->paginate($request->per_page ?? 30);
 
         $meta = [
-            'current_page' => $query->currentPage(),
-            'per_page' => $query->perPage(),
-            'last_page' => $query->lastPage(),
-            'total_pages' => $query->lastPage(),
-            'total' => $query->total(),
+            'current'     => $paginator->currentPage(),
+            'previous'    => $paginator->currentPage() > 1 ? $paginator->currentPage() - 1 : null,
+            'next'        => $paginator->currentPage() < $paginator->lastPage() ? $paginator->currentPage() + 1 : null,
+            'total'       => $paginator->lastPage(),
+            'perPage'     => $paginator->perPage(),
+            'totalItems'  => $paginator->total(),
         ];
-        return okResponse($query->all(), meta: $meta);
-    }
 
+        $data = $resource
+            ? $resource::collection($paginator)
+            : $paginator->items();
+
+        return okResponse($data, meta: $meta);
+    }
 
 
     protected function search(Request $request, QueryBuilder $query, $column = 'name'): void
@@ -97,9 +101,7 @@ trait QueryBuilderTrait
                         $query->orWhere($column, 'ILIKE', "%$search%");
                     }
                 }
-
             });
         }
     }
-
 }
